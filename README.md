@@ -4,11 +4,11 @@
 
 ## 📋 About
 
-[TaskFlow](https://taskflowapp.net/) is a fully deployed productivity web application with a modular architecture designed to help users stay focused, organized, and distraction-free. Built as a custom single page application using vanilla JavaScript with an object oriented MVC architecture, it delivers a smooth and responsive user experience. 
+[TaskFlow](https://taskflowapp.net/) is a deployed minimalistic-focused productivity web application with a modular architecture designed to help users stay focused, organized, and distraction-free. Built as a custom single page application using vanilla JavaScript with an object oriented MVC architecture, it delivers a smooth and responsive user experience. 
 
 The frontend is bundled with Webpack and Babel while interacting with a secure RESTful API built in pure PHP, also following object oriented MVC design. The API is protected with JWT authentication and configured to handle CORS for secure cross-origin requests. Access control is enforced using Redis based rate limiting, while data persistence is managed separately with MySQL to ensure reliable storage. The interface is clean, accessible, and intuitive, supporting task management, reminders, and progress tracking. All designed with simplicity and usability in mind.
 
-The source code and summarized documentation for the RESTful API can be found in the [TaskFlow API repository](https://github.com/AngelValentino/taskflow-api).
+The source code for the API has been set to private for increased security purposes. Notwithstanding, [documentation is available here](#-further-documentation), explaining the architecture, functionality, and security hardening.
 
 ### 📱 Progressive Web App (PWA) Support
 
@@ -40,6 +40,22 @@ This project draws inspiration from several sources that helped shape its develo
 - 🏷️ **404 Page:** Custom-built not found page for handling invalid routes, providing a smooth and user-friendly experience even when users land on non-existent URLs.
 - 🏗️ **Robust Object-Oriented MVC Architecture:** Both the client-side SPA and the backend API are built using a modular, object-oriented MVC design, ensuring clean separation of concerns, maintainability, and scalability across the entire stack.
 - 🧩 **Reusable Components:** Key components such as modals and prompts are designed to be reusable across multiple views.
+
+### 🛰️ API
+
+Built in pure modern PHP with Composer using an object-oriented MVC architecture, the API handles secure JWT authentication, rate limiting with Redis, and communicates with a MySQL database for reliable data storage.
+
+#### 🛡️ Features and Security
+
+- Secure JWT-based authentication and token refresh with robust token management  
+- Rate limiting powered by Redis to prevent abuse and mitigate brute-force attacks  
+- CORS support with IP and device ID validation, plus strict input sanitization to enhance security  
+- Modular, maintainable MVC architecture with Composer autoloader for professional, clean structure  
+- MySQL database integration using prepared statements for SQL injection prevention, hosted separately from the API in an isolated environment  
+- Thorough user input validation and JSON escaping to prevent XSS and other injection attacks  
+- Deployed on a hardened Linux server with SSH-only access, Fail2Ban, and strict file permissions. It uses HTTPS with an A+ SSL Labs rating for secure communication. Log rotation is configured for API logs, and Apache serves the API from the public folder with `.htaccess` for URL rewriting and added security.
+
+Despite best efforts and adherence to industry best practices, no web application can guarantee 100% security due to inherent platform limitations and constantly evolving threats; ongoing vigilance and improvements remain essential.
 
 ### 📊 Audit and Security Scores
 
@@ -88,164 +104,6 @@ Below are the actual audit and security test results demonstrating the app’s p
   - HTTPS with an A+ SSL Labs grade, ensuring secure and encrypted communication across the entire application.
   - Log Rotation properly configured for API logs to ensure efficient log management
   - API configured with Apache to be served from the public folder, using `.htaccess` for URL rewriting and enhanced security
-
-<br>
-
-## 🧪 Local Development
-
-In this guide, I'll walk you through setting up **TaskFlow** locally using **XAMPP** for the API and **Composer** for managing PHP dependencies, but feel free to use any stack or tools you prefer. The following technologies are used in this setup:
-
-- **XAMPP** (Apache, PHP, MySQL) for the backend
-- **Redis** running via **WSL (Windows Subsystem for Linux)** for rate limiting
-- **Apache Virtual Hosts** for clean URL routing
-- **Composer** to manage PHP dependencies and autoloading
-- **Webpack and Babel** for client-side development and bundling
-- **Node & Express server** to serve the final Webpack build (though you can use your preferred server setup)
-
-### 💻 API Local Setup
-
-#### Clone the repository
-
-It must be cloned in `C:/xampp/htdocs/` to be able to use it with XAMPP.
-
-```bash
-git clone https://github.com/AngelValentino/taskflow-api.git
-```
-
-- Run the following command to install the necessary dependencies, which are required for  **PHPMailer**, **phpdotenv**, and **Predis**. Composer will also handle the autoloading capabilities for the project.
-  
-  ```bash
-  composer install
-  ```
-
-#### Set up Apache Virtual Host
-
-Configure a custom local domain for your API (e.g., `taskflow-api.com`) to support proper routing, as well as serving files from public folder.
-
-- Edit your `httpd-vhosts.conf` file (located in `C:/xampp/apache/conf/extra/`):
-  
-  ```apache
-  <VirtualHost *:80>
-      DocumentRoot "C:/xampp/htdocs/taskflow-api/public"
-      ServerName taskflow-api.com
-      <Directory "C:/xampp/htdocs/taskflow-api/public">
-          Options Indexes FollowSymLinks
-          AllowOverride All
-          Require all granted
-      </Directory>
-  </VirtualHost>
-  ```
-
-  Enables Apache to use `.htaccess` files for URL rewriting, security, and routing. Setting the document root to the `public` folder ensures only publicly accessible files are served, keeping internal files secure.
-
-- Add the domain to your system's `hosts` file (`C:/Windows/System32/drivers/etc/hosts`):
-  
-  ```
-  127.0.0.1       taskflow-api.com
-  ```
-
-  Ensures that when you visit `taskflow-api.com` in your browser, it will route to your local machine (127.0.0.1) instead of trying to find the domain on the internet.
-
-#### Set up the `.env` file
-
-Create a `.env` file in the root of the project (if it doesn't exist), and define the required environment variables. These configure the database, Redis, email service, JWT authentication, CORS and environment-specific settings.
-
-```env
-# Environment 
-APP_ENV="development"    # Set to 'development' or 'production'
-
-# Client URLs
-CLIENT_URL_DEV="http://localhost:3000"    # Development client URL
-CLIENT_URL_PROD="https://yourdomain.com"    # Production client URL
-
-# Allowed Origins (comma-separated if multiple)
-DEVELOPMENT_ORIGINS="http://localhost:3000"
-PRODUCTION_ORIGINS="https://yourdomain.com"
-
-# Database Configuration
-DB_HOST="127.0.0.1"
-DB_PORT="3306"
-DB_NAME="your_database_name"
-DB_USER="your_database_user"
-DB_PASSWORD="your_database_password"
-DB_SSL="false"    # Set to "true" if using SSL
-DB_SSL_CA="-----BEGIN CERTIFICATE-----..."    # Required only if DB_SSL is "true"
-
-# Redis Configuration
-REDIS_HOST="127.0.0.1"
-REDIS_PORT="6379"
-
-# Mail Configuration
-MAIL_HOST="smtp.yourprovider.com"
-SENDER_EMAIL="you@example.com"
-SENDER_PASSWORD="your_email_password"
-SENDER_USERNAME="your_name"
-SENDER_PORT="587"   # Your provider specified port
-
-# JWT Secret Key
-SECRET_KEY="your_super_secret_key"
-```
-
-#### Start Apache and MySQL via XAMPP
-
-- **Start Apache and MySQL**: 
-  Open the XAMPP control panel and ensure that both **Apache** and **MySQL** services are running.
-
-- **Place the Project in XAMPP's `htdocs/` Folder**
-  If the project directory isn't already there, move it to the `htdocs/` folder. For example:
-  
-  ```bash
-  C:/xampp/htdocs/taskflow
-  ```
-
-- **Start Redis in WSL**
-  
-  ```bash
-  redis-server
-  ```
-
-  Make sure Redis is running and accessible from the PHP backend for proper rate limiting.
-
-
-### 💾 MySQL DB Local Setup
-
-#### Import MySQL Schema
-
-Use **phpMyAdmin** or the **MySQL CLI** to import the provided schema SQL files into your database. The `schema.sql` and `queries.sql` files can be found in the `docs/assets/db` folder. Alternatively, you can click [here](./docs/assets/db) to access them directly.
-
-### 🌐 Client Vanilla SPA Local Setup
-
-#### Clone the repository
-
-  ```bash
-  git clone https://github.com/AngelValentino/TaskFlow.git
-  ```
-
-- Run the following command to install the necessary dependencies, which are required for **Webpack**, **Babel**, and the **Node.js express** server:
-   
-   ```bash
-   npm install
-   ```
-
-#### Development and Production
-
-- For development with Webpack (live reloading and hot module replacement), run:
-  
-  ```bash
-  npm run dev
-  ```
-
-- To create the final production build, run:
-  
-  ```bash
-  npm run build
-  ```
-
-- To create the Express server serving the final build run:
-  
-  ```
-  npm run start
-  ```
 
 <br>
 
@@ -334,7 +192,7 @@ These improvements are planned possibilities and may evolve based on feedback an
 
 Feel free to reach out for feedback, collaboration, or opportunities:
 
-- **GitHub**: [AngelValentino](https://github.com/AngelValentino)  
+- **GitHub**: [angelvalentino](https://github.com/angelvalentino)  
 - **Email**: angelvalentino294@gmail.com
 
 While I deeply value collaboration and community feedback, this project serves as a personal showcase of my software development and engineering skills. For that reason, I personally implement all features and improvements.
