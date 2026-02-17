@@ -111,6 +111,7 @@ export default class TaskManagerView {
   }
 
   showPrompt(promptLm, btnLm, firstFocusableLm, hidePromptTimId, timeout) {
+    this.router.abortActiveFetches();
     clearTimeout(hidePromptTimId);
 
     promptLm.removeAttribute('hidden');
@@ -121,7 +122,10 @@ export default class TaskManagerView {
     }, 20);
 
     const focusFirstPromptLmTimId = setTimeout(() => {
-      this.modalHandler.toggleModalFocus('add', firstFocusableLm);
+      this.modalHandler.addFocus({
+        firstFocusableLm: firstFocusableLm,
+        auto: false
+      });
     }, timeout);
 
     this.router.setActiveTimeout('focusFirstPromptLm', focusFirstPromptLmTimId);
@@ -132,7 +136,10 @@ export default class TaskManagerView {
     clearTimeout(focusFirstPromptLmTimId);
 
     if (returnFocus) {
-      this.modalHandler.toggleModalFocus('return', null, btnLm);
+      this.modalHandler.restoreFocus({
+        lastFocusedLm: btnLm,
+        auto: false
+      });
     }
     this.toggleActiveBtn(btnLm);
     promptLm.classList.remove('active');
@@ -155,13 +162,13 @@ export default class TaskManagerView {
     );
 
     // Add event listeners
-    this.modalHandler.addModalEvents({
-      eventHandlerKey: 'addTaskPrompt',
+    this.modalHandler.addA11yEvents({
+      modalKey: 'addTaskPrompt',
       modalLm: this.lms.addTaskPromptLm,
-      closeLms: [this.lms.addTaskPromptCloseBtn],
-      closeHandler: this.confirmDiscardPromptData.bind(this),
       modalLmOuterLimits: this.lms.taskManagerLm,
-      exemptLms: [this.userMenuView.lms.userMenuBtn]
+      closeLms: [ this.lms.addTaskPromptCloseBtn ],
+      exemptLms: [ this.userMenuView.lms.userMenuBtn ],
+      closeHandler: this.confirmDiscardPromptData.bind(this)
     });
   }
 
@@ -183,11 +190,7 @@ export default class TaskManagerView {
     );
 
     // Remove event listeners
-    this.modalHandler.removeModalEvents({
-      eventHandlerKey: 'addTaskPrompt',
-      modalLm: this.lms.addTaskPromptLm,
-      closeLms: [this.lms.addTaskPromptCloseBtn]
-    });
+    this.modalHandler.removeA11yEvents({ modalKey: 'addTaskPrompt' });
   }
 
   openSearchTaskPrompt() {
@@ -200,11 +203,11 @@ export default class TaskManagerView {
     );
 
     // Add event listeners
-    this.modalHandler.addModalEvents({
-      eventHandlerKey: 'searchTaskPrompt',
+    this.modalHandler.addA11yEvents({
+      modalKey: 'searchTaskPrompt',
       closeHandler: this.closeSearchTaskPrompt.bind(this),
       modalLmOuterLimits: this.lms.taskManagerLm,
-      exemptLms: [this.userMenuView.lms.userMenuBtn]
+      exemptLms: [ this.userMenuView.lms.userMenuBtn ]
     });
   }
 
@@ -244,9 +247,7 @@ export default class TaskManagerView {
     );
 
     // Remove event listeners
-    this.modalHandler.removeModalEvents({
-      eventHandlerKey: 'searchTaskPrompt'
-    });
+    this.modalHandler.removeA11yEvents({ modalKey: 'searchTaskPrompt' });
   }
 
   resetAddTaskForm() {

@@ -66,8 +66,7 @@ export default class TaskManagerController {
       this.modalView.openInfoModal({
         confirmHandler: this.taskManagerView.resetAddTaskForm.bind(this.taskManagerView),
         modalType: 'infoMaxTasks',
-        returnFocus: false,
-        exemptLms: [this.lms.submitTaskBtn]
+        returnFocus: false
       });
       return;
     }
@@ -286,8 +285,7 @@ export default class TaskManagerController {
     if (parseInt(localStorage.getItem('taskCount')) <= 0) {
       this.modalView.openInfoModal({
         confirmHandler: null,
-        modalType: 'InfoEmptyTaskList',
-        exemptLms: [this.lms.clearAllTasksBtn]
+        modalType: 'infoEmptyTaskList'
       });
       return;
     }
@@ -295,8 +293,7 @@ export default class TaskManagerController {
     this.modalView.openConfirmModal({
       confirmHandler: this.deleteAllTasks.bind(this),
       isFetch: this.auth.isClientLogged(),
-      modalType: 'confirmDeleteAllTasks',
-      exemptLms: [this.lms.clearAllTasksBtn]
+      modalType: 'confirmDeleteAllTasks'
     });
   }
 
@@ -410,8 +407,7 @@ export default class TaskManagerController {
         confirmHandler: this.completeTask.bind(this, taskId),
         isFetch: this.auth.isClientLogged(),
         modalType: 'confirmComplete',
-        returnFocusAtConfirmHandler: false,
-        exemptLms: [completeTaskBtn]
+        returnFocusAtConfirmHandler: false
       });
     }
     else if (editTaskBtn) {
@@ -426,8 +422,7 @@ export default class TaskManagerController {
       this.modalView.openEditModal({
         taskData, 
         editHandler: this.editTask.bind(this, taskId),
-        taskId,
-        exemptLms: [editTaskBtn]
+        taskId
       });
     }
     else if (deleteTaskBtn) {
@@ -437,43 +432,45 @@ export default class TaskManagerController {
         confirmHandler: this.deleteTask.bind(this, taskId),
         isFetch: this.auth.isClientLogged(),
         modalType: 'confirmDeleteTask',
-        returnFocusAtConfirmHandler: false,
-        exemptLms: [deleteTaskBtn]
+        returnFocusAtConfirmHandler: false
       });
     }
   }
 
   toggleAddTaskPrompt() {
-    if (this.lms.addTaskPromptLm.classList.contains('active')) {
-      this.taskManagerView.confirmDiscardPromptData();
+    // Close the neighboring search task prompt if it is currently active
+    if (this.lms.searchTaskPromptLm.classList.contains('active')) {
+      this.taskManagerView.closeSearchTaskPrompt(false);
+    }
+
+    // Toggle prompt
+    if (!this.lms.addTaskPromptLm.classList.contains('active')) {
+      this.taskManagerView.openAddTaskPrompt();
     } 
     else {
-      // Close neighbour prompt if active
-      if (this.lms.searchTaskPromptLm.classList.contains('active')) {
-        this.taskManagerView.closeSearchTaskPrompt(false);
-      }
-      this.taskManagerView.openAddTaskPrompt();
+      this.taskManagerView.confirmDiscardPromptData();
     }
   }
 
   toggleSearchTaskPrompt() {
-    if (this.lms.searchTaskPromptLm.classList.contains('active')) {
-      this.taskManagerView.closeSearchTaskPrompt();
+    // Close the neighboring add task prompt if it is currently active and we are not in the enhanced task manager view
+    if (!this.isEnhancedTaskManager && this.lms.addTaskPromptLm.classList.contains('active')) {
+      // If the Add Task form has unsaved data, prompt the user for confirmation
+      if (this.utils.isFormPopulated(this.lms.addTaskPromptFormLm)) {
+        this.taskManagerView.confirmDiscardPromptData();
+        return;
+      } 
+
+      // Otherwise, close the Add Task prompt without confirmation and without returning focus
+      this.taskManagerView.closeAddTaskPrompt(false);
+    }
+
+    // Open the Search Task prompt only if it is not already open
+    if (!this.lms.searchTaskPromptLm.classList.contains('active')) {
+      this.taskManagerView.openSearchTaskPrompt();  
     } 
     else {
-      if (!this.isEnhancedTaskManager) {
-        // Check if add task form has been edited
-        if (this.isEnhancedTaskManager && this.utils.isFormPopulated(this.lms.addTaskPromptFormLm)) {
-          this.taskManagerView.confirmDiscardPromptData();
-          return;
-        }
-
-        // Close neighbour prompt if active
-        if (this.lms.addTaskPromptLm.classList.contains('active')) {
-          this.taskManagerView.closeAddTaskPrompt(false);
-        }
-      }
-      this.taskManagerView.openSearchTaskPrompt();      
+      this.taskManagerView.closeSearchTaskPrompt();
     }
   }
 

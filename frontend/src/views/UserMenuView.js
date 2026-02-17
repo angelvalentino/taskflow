@@ -1,8 +1,10 @@
 export default class UserMenuView {
-  constructor(modalHandler, userMenuModel, utils) {
+  constructor(modalHandler, userMenuModel, utils, router) {
     this.modalHandler = modalHandler;
     this.userMenuModel = userMenuModel;
+    this.router = router;
     this.utils = utils;
+
     this.lms = {
       userMenuBtn: document.getElementById('user-menu__btn'),
       userMenuLm: document.getElementById('user-menu'),
@@ -43,28 +45,34 @@ export default class UserMenuView {
   }
 
   openUserMenu() {
+    this.router.abortActiveFetches();
+    
     this.lms.userMenuLm.classList.add('active');
     const firstFocusableLm = this.lms.userMenuLm.children[0].querySelector('.user-menu__link')
-    this.lastFocusedLmBeforeModal = this.modalHandler.toggleModalFocus('add', firstFocusableLm);
+
+    this.lastFocusedLmBeforeModal = this.modalHandler.addFocus({
+      firstFocusableLm: firstFocusableLm, 
+      auto: false
+    });
     this.setUserMenuBtnAria('true', 'Close user menu');
 
-    this.modalHandler.addModalEvents({
-      eventHandlerKey: 'userMenu',
+    this.modalHandler.addA11yEvents({
+      modalKey: 'userMenu',
       modalLm: this.lms.userMenuLm,
-      closeHandler: this.closeUserMenu.bind(this),
       modalLmOuterLimits: this.lms.userMenuLm,
-      exemptLms: [this.lms.userMenuBtn]
+      exemptLms: [ this.lms.userMenuBtn ],
+      closeHandler: this.closeUserMenu.bind(this)
     });
   }
 
   closeUserMenu() {
     this.lms.userMenuLm.classList.remove('active');
-    this.modalHandler.toggleModalFocus('return', null, this.lastFocusedLmBeforeModal);
+    this.modalHandler.restoreFocus({
+      lastFocusedLm: this.lastFocusedLmBeforeModal,
+      auto: false
+    })
     this.setUserMenuBtnAria('false', 'Open user menu');
 
-    this.modalHandler.removeModalEvents({
-      eventHandlerKey: 'userMenu',
-      modalLm: this.lms.userMenuLm,
-    });
+    this.modalHandler.removeA11yEvents({ modalKey: 'userMenu' });
   }
 }

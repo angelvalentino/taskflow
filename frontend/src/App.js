@@ -1,3 +1,5 @@
+import ModalHandler from "vanilla-aria-modals";
+
 import DashboardPage from "./pages/dashboard/Dashboard.js";
 import RegisterPage from "./pages/register/Register.js";
 import LoginPage from "./pages/login/Login.js";
@@ -14,7 +16,6 @@ import LogoutController from "./controllers/LogoutController.js";
 import UserModel from "./models/UserModel.js";
 import TaskManagerView from "./views/TaskManagerView.js";
 import TaskManagerController from "./controllers/TaskManagerController.js";
-import ModalHandler from "./services/ModalHandler.js";
 import TaskModel from "./models/TaskModel.js";
 import TokenHandler from "./services/TokenHandler.js";
 import ModalView from "./views/ModalView.js";
@@ -52,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const appLm = document.getElementById('App');
   const modalHandler = new ModalHandler;
   const router = new Router(modalHandler);
-  modalHandler.setRouterInstance(router);
   const utils = new Utils;
   const loadHandler = new LoadHandler;
   const auth = new Auth;
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // User menu
     const userMenuModel = new UserMenuModel;
-    const userMenuView = new UserMenuView(modalHandler, userMenuModel, utils);
+    const userMenuView = new UserMenuView(modalHandler, userMenuModel, utils, router);
     const userMenuController = new UserMenuController(userMenuView, auth, router);
     userMenuController.init();
 
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // User menu
     const userMenuModel = new UserMenuModel;
-    const userMenuView = new UserMenuView(modalHandler, userMenuModel, utils);
+    const userMenuView = new UserMenuView(modalHandler, userMenuModel, utils, router);
     const userMenuController = new UserMenuController(userMenuView, auth, router);
     userMenuController.init();
 
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // User menu
     const userMenuModel = new UserMenuModel;
-    const userMenuView = new UserMenuView(modalHandler, userMenuModel, utils);
+    const userMenuView = new UserMenuView(modalHandler, userMenuModel, utils, router);
     const userMenuController = new UserMenuController(userMenuView, auth, router);
     userMenuController.init();
 
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // User menu
     const userMenuModel = new UserMenuModel;
-    const userMenuView = new UserMenuView(modalHandler, userMenuModel, utils);
+    const userMenuView = new UserMenuView(modalHandler, userMenuModel, utils, router);
     const userMenuController = new UserMenuController(userMenuView, auth, router);
     userMenuController.init();
 
