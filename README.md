@@ -6,7 +6,7 @@
 
 [TaskFlow](https://taskflowapp.net/) is a deployed minimalistic-focused productivity web application with a modular architecture designed to help users stay focused, organized, and distraction-free. Built as a custom single page application using vanilla JavaScript with an object oriented MVC architecture, it delivers a smooth and responsive user experience. 
 
-The frontend is bundled with Webpack and Babel while interacting with a secure RESTful API built in pure PHP, also following object oriented MVC design. The API is protected with JWT authentication and configured to handle CORS for secure cross-origin requests. Access control is enforced using Redis based rate limiting, while data persistence is managed separately with MySQL to ensure reliable storage. The interface is clean, accessible, and intuitive, supporting task management, reminders, and progress tracking. All designed with simplicity and usability in mind.
+The frontend is bundled with Webpack and Babel while interacting with a secure RESTful API built in pure PHP with composer, following a OOP MVC approach. The API is protected with JWT authentication and configured to handle CORS for secure cross-origin requests. Access control is enforced using Redis based rate limiting, while data persistence is managed separately with MySQL to ensure reliable storage. The interface is clean, accessible, and intuitive, supporting task management, reminders, and progress tracking. All designed with simplicity and usability in mind.
 
 The source code for the API has been set to private for increased security purposes. Notwithstanding, [documentation is available here](#-further-documentation), explaining the architecture, functionality, and security hardening.
 
@@ -22,7 +22,6 @@ This project draws inspiration from several sources that helped shape its develo
 - The **API and JWT structure** was inspired by *APIs in PHP: From Basic to Advanced* by Dave Hollingworth. His channel and documentation also helped me configure Composer.
 - The **vanilla SPA (Single Page Application) design** was inspired by *Build a Single Page Application with JavaScript (No Frameworks)* by dcode. While the final router is completely different from his, I learned about the vanilla SPA concept from him.
 - The overall project, including its **UI and UX**, was designed mostly by me. However, the **quote machine UI** design was inspired by a project from FreeCodeCamp.
-- Several **YouTube tutorials**, **forums**, and online documentation, such as **W3Schools** and **MDN**, provided valuable insights, covering everything from technical documentation to modern accessibility, security, and deployment practices.
 
 <br>
 
@@ -36,6 +35,7 @@ This project draws inspiration from several sources that helped shape its develo
 - 🔒 **Security First:** All connections are secured with HTTPS (A+ SSL Labs grade), utilizing secure JWT authentication and industry-standard practices for server hardening and encryption.
 - 📱 **Responsive, Dynamic Interface Across All Devices:** The app is fully responsive, dynamically adjusting to desktops, tablets, mobiles, smartwatches, and any other device, with media queries and styled using pure vanilla CSS.
 - 🌍 **Accessibility Focus:** Designed with inclusivity in mind, the app emphasizes accessibility to ensure it can be used by everyone. While the broad range of themes may pose minor challenges for some colorblind users, future updates aim to introduce a dedicated colorblind-friendly theme pack.  
+- 🗂️ **vanilla-aria-modals Implementation:** My [modal handler](https://www.npmjs.com/package/vanilla-aria-modals) utility ensures consistent ARIA behavior, keyboard navigation, modal stacking, and focus management across menus and scenes. 
 - ⚡ **Optimized Performance:** Achieved a full score in Google’s Lighthouse audit under standard conditions, ensuring top-tier performance, accessibility, best practices, and SEO. Performance may slightly vary (e.g., 97–99) when logged in or on mobile due to dynamic content and runtime features.
 - 🏷️ **404 Page:** Custom-built not found page for handling invalid routes, providing a smooth and user-friendly experience even when users land on non-existent URLs.
 - 🏗️ **Robust Object-Oriented MVC Architecture:** Both the client-side SPA and the backend API are built using a modular, object-oriented MVC design, ensuring clean separation of concerns, maintainability, and scalability across the entire stack.

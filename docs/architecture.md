@@ -51,12 +51,12 @@ This strategy allows for a more scalable and maintainable application, where the
 
 Centralizes shared logic such as API communication, authentication, and utility functions to keep controllers and models clean and focused. These services enhance reusability, streamline resource handling, and help maintain a consistent and smooth user experience. Below is a summary of each service:
 
+- [vanilla-aria-modals](https://www.npmjs.com/package/vanilla-aria-modals): Manages the modal lifecycle by ensuring accessibility, focus management, and event handling. This includes functionality such as focus trapping, closing on Escape key press, and registering modals as a stack for better active modal management.
 - **Auth**: Manages user authentication and session validation via tokens stored in localStorage.
 - **AuthFormHandler**: Handles form validation for authentication-related forms, including real-time feedback, password matching, and form submission control.
 - **DeviceIdentifier**: Generates and manages a unique device identifier (UUID) for each device, ensuring consistency across sessions.
 **FetchHandler**: Manages API requests, handling authentication tokens, error responses, retries, and token refresh requests to the token handler. It also controls what is included in the request headers, such as adding the Bearer JWT, Content-Type, or device ID.
 - **LoadHandler**: Optimizes image loading and preloading, ensuring smooth transitions and managing global loaders such as the page loader.
-**ModalHandler**: Manages the modal lifecycle by ensuring accessibility, focus management, and event handling. This includes functionality such as focus trapping, closing on Escape key press, and registering modals as a stack for better active modal management.
 - **ThemeHandler**: Manages dynamic theme changes, supporting theme transitions with background image preloading.
 - **TokenHandler**: Handles coordinated token refresh operations, ensuring only one token refresh request is active at a time, avoiding race conditions.
 - **Utils**: Provides various helper functions for form handling, error rendering, random index generation, and sound control used throughout the client.
