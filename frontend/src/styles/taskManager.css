@@ -132,6 +132,7 @@
   border-radius: 50px;
   font-size: 1.15rem;
   overflow: hidden;
+  line-height: 1.1;
 }
 
 .task-manager__tab-btn.active {
@@ -369,6 +370,10 @@
 
   .task-manager { 
     height: 740px;
+  }
+
+  .task-manager__dashboard {
+    width: 100.05%; /* Edge case for firefox if not the prompt overflows 1px on right */
   }
 }
 
