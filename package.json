@@ -24,6 +24,6 @@
     "webpack-dev-server": "^5.2.1"
   },
   "dependencies": {
-    "vanilla-aria-modals": "^1.1.4"
+    "vanilla-aria-modals": "^1.1.6"
   }
 }
